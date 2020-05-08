@@ -3,7 +3,7 @@ const placeController = require('../controllers/placeController');
 
 const router = express.Router();
 
-router.param('pid', placeController.checkId);
+// router.param('pid', placeController.checkId);
 
 router
   .route('/')

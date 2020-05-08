@@ -4,7 +4,8 @@ const placeSchema = mongoose.Schema({
   title: {
     type: String,
     required: true,
-    maxLength: [40, 'A place title must have at least 40 characters'],
+    trim: true,
+    maxlength: [40, 'A place title must have at least 40 characters'],
   },
 
   nbrViews: {
@@ -26,6 +27,7 @@ const placeSchema = mongoose.Schema({
   nbrLikes: {
     type: Number,
     default: 0,
+    // select: false
   },
 
   share: {
