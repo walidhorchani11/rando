@@ -2,7 +2,18 @@ const Place = require('../models/placeModel');
 
 exports.getAllPlaces = async (req, res, next) => {
   try {
-    const places = await Place.find();
+    let query = Place.find();
+    // ******* sort *********
+    if(req.query.sort){
+      // i can receive => {sort: "-price,duration"}
+      // formatage:
+      const sortBy = req.query.sort.split(',').join(' ');
+      query.sort(sortBy);
+    }else{
+      query.sort('-createdAt');
+    }
+    // **********************
+    const places = await query;
     res.status(200).json({
       status: "success",
       results: places.length,
