@@ -17,3 +17,8 @@ exports.updatePlace = (req, res, next) => {
 exports.deletePlace = (req, res, next) => {
   res.end('deletePlace in progress');
 };
+
+exports.checkId = (req, res, next, val) => {
+  console.log('la valeur du parametre est : ', val);
+  next();
+};
