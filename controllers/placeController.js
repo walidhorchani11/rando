@@ -4,6 +4,13 @@ exports.getAllPlaces = async (req, res, next) => {
   try {
     let query = Place.find();
 
+    // *********paginatin & limit ********
+    const page = req.query.page * 1 || 1;
+    const limit = req.query.limit * 1 || 10;
+    // page 2 => 11 - 20; page 3 => 21 - 30
+    const skip = (page - 1) * limit;
+    query.skip(skip).limit(limit);
+
     // ********** selection  ***********
     // {fields: "title,cost,description"}
     if (req.query.fields) {
@@ -12,7 +19,7 @@ exports.getAllPlaces = async (req, res, next) => {
     } else {
       query.select('-__v');
     }
-    // ***********************
+
     // ******* sort *********
     if (req.query.sort) {
       // i can receive => {sort: "-price,duration"}
