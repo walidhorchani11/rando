@@ -3,13 +3,23 @@ const Place = require('../models/placeModel');
 exports.getAllPlaces = async (req, res, next) => {
   try {
     let query = Place.find();
+
+    // ********** selection  ***********
+    // {fields: "title,cost,description"}
+    if (req.query.fields) {
+      const selectedFields = req.query.fields.split(',').join(' ');
+      query.select(selectedFields);
+    } else {
+      query.select('-__v');
+    }
+    // ***********************
     // ******* sort *********
-    if(req.query.sort){
+    if (req.query.sort) {
       // i can receive => {sort: "-price,duration"}
       // formatage:
       const sortBy = req.query.sort.split(',').join(' ');
       query.sort(sortBy);
-    }else{
+    } else {
       query.sort('-createdAt');
     }
     // **********************
