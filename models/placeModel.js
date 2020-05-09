@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const slugify = require('slugify');
 
 const placeSchema = mongoose.Schema({
   title: {
@@ -55,6 +56,14 @@ const placeSchema = mongoose.Schema({
     required: false,
   },
   // user proprietaire
+}, {
+  toJSON: {virtuals: true}
+});
+
+// placeSchema.set('toJSON', { getters: true, virtuals: true });
+
+placeSchema.virtual('slug').get(function(){
+  return slugify(this.title);
 });
 
 module.exports = mongoose.model('Place', placeSchema);
