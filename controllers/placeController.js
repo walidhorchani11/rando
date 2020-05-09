@@ -4,6 +4,20 @@ exports.getAllPlaces = async (req, res, next) => {
   try {
     let query = Place.find();
 
+    // ********** filter ********
+    // avec postman : ?cost[gte]=50,nbrLikes=10,sort=-cost,page.....
+    // on la recus : cost: {gte:50} // noter labsence du $
+    // on aura aussi les sort, page limit fields qu on doit les exclure
+    console.log('queryyyyy:::', req.query);
+    let queryObj = {...req.query};
+    const excluded = ['sort', 'fields', 'page', 'limit'];
+    excluded.map(elem => delete queryObj[elem]);
+
+    // ajout du signe $
+    let queryStr = JSON.stringify(queryObj);
+    queryStr = queryStr.replace(/\b(lte|lt|gte|gt)\b/g, match => `$${match}`);
+    query = query.find(JSON.parse(queryStr));
+
     // *********paginatin & limit ********
     const page = req.query.page * 1 || 1;
     const limit = req.query.limit * 1 || 10;
