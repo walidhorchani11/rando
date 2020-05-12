@@ -1,10 +1,12 @@
 const mongoose = require('mongoose');
+const slugify = require('slugify');
 
 const placeSchema = mongoose.Schema({
   title: {
     type: String,
     required: true,
-    maxLength: [40, 'A place title must have at least 40 characters'],
+    trim: true,
+    maxlength: [40, 'A place title must have at least 40 characters'],
   },
 
   nbrViews: {
@@ -26,6 +28,7 @@ const placeSchema = mongoose.Schema({
   nbrLikes: {
     type: Number,
     default: 0,
+    // select: false
   },
 
   share: {
@@ -53,6 +56,14 @@ const placeSchema = mongoose.Schema({
     required: false,
   },
   // user proprietaire
+}, {
+  toJSON: {virtuals: true}
+});
+
+// placeSchema.set('toJSON', { getters: true, virtuals: true });
+
+placeSchema.virtual('slug').get(function(){
+  return slugify(this.title);
 });
 
 module.exports = mongoose.model('Place', placeSchema);

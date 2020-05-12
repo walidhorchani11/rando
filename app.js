@@ -6,7 +6,7 @@ const placeRouter = require('./routes/placeRoutes');
 dotenv.config({ path: `${__dirname}/config.env` });
 const app = express();
 
-console.log('in app express env is ::: ', process.env.NODE_ENV);
+app.use(express.json());
 
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
