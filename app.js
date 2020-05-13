@@ -1,6 +1,8 @@
 const express = require('express');
 const morgan = require('morgan');
 const dotenv = require('dotenv');
+const AppError = require('./utils/appError');
+const globalErrorHandler = require('./controllers/errorController');
 const placeRouter = require('./routes/placeRoutes');
 
 dotenv.config({ path: `${__dirname}/config.env` });
@@ -23,21 +25,13 @@ app.all('*', (req, res, next) => {
   // });
 
   // creation d error
-  const error = new Error(`paath ${req.originalUrl} not found!`);
-  error.status = 'fail';
-  error.statusCode = 404;
+  // const error = new Error(`paath ${req.originalUrl} not found!`);
+  // error.status = 'fail';
+  // error.statusCode = 404;
 
-  next(error);
+  next(new AppError(`path ${req.originalUrl} not found!`, 404));
 });
 
-app.use((error, req, res, next) => {
-  error.status = error.status || 'fail';
-  error.statusCode = error.statusCode || 500;
-
-  res.status(error.statusCode).json({
-    status: error.status,
-    message: error.message,
-  });
-});
+app.use(globalErrorHandler);
 
 module.exports = app;
