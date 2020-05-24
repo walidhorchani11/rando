@@ -4,6 +4,7 @@ const dotenv = require('dotenv');
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
 const placeRouter = require('./routes/placeRoutes');
+const userRouter = require('./routes/usersRoutes');
 
 dotenv.config({ path: `${__dirname}/config.env` });
 const app = express();
@@ -16,6 +17,7 @@ if (process.env.NODE_ENV === 'development') {
 app.use(express.static(`${__dirname}/public`));
 
 app.use('/api/v1/places', placeRouter);
+app.use('/api/v1/users', userRouter);
 
 // pour les routes inexistant
 app.all('*', (req, res, next) => {
