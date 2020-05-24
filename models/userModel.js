@@ -27,6 +27,12 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, 'please confirm your password!'],
     select: false,
+    validate: {
+      validator: function (value) {
+        return value === this.password;
+      },
+      message: 'your passwords does not match!',
+    },
   },
   photo: {
     type: String,
