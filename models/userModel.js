@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
+const bcrypt = require('bcrypt');
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -38,6 +39,15 @@ const userSchema = new mongoose.Schema({
     type: String,
   },
 });
-// use hook pre on save pour verifier le passwordConfirm et le mettre to undefined
+
+userSchema.pre('save', async function (next) {
+  //en cas d update si j'ai pas modifier le password on sort
+  // mais fait attention et verifie si ca marche avec findByIdAndUpdate
+  if (!this.isModified('password')) next();
+  this.password = await bcrypt.hash(this.password, 12);
+  this.passwordConfirm = undefined;
+  // n oublier pas next pour passer au next doc middleware if exist
+  next();
+});
 
 module.exports = mongoose.model('User', userSchema);
