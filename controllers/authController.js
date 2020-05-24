@@ -11,11 +11,9 @@ exports.signup = async (req, res, next) => {
       passwordConfirm: req.body.passwordConfirm,
     });
     // generation token
-    const token = jwt.sign(
-      { id: newUser._id },
-      'hello_my_secret_key_for_generation_token',
-      { expiresIn: 3600000 }
-    );
+    const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
+      expiresIn: process.env.JWT_EXPIRES_IN,
+    });
 
     res.status(201).json({
       status: 'success',
