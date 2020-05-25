@@ -50,4 +50,11 @@ userSchema.pre('save', async function (next) {
   next();
 });
 
+userSchema.methods.correctPassword = async function (
+  condidatePassword,
+  userPasword
+) {
+  return await bcrypt.compare(condidatePassword, userPasword);
+};
+
 module.exports = mongoose.model('User', userSchema);
